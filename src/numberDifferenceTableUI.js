@@ -1,12 +1,16 @@
 import "tachyons";
-import calculations from "./calculations.js";
+import calculations from "./calculations";
 
 const numberDifferenceTableUI = {
   container: null,
   selectMin: 3,
   selectMax: 20,
+  inputWidth: 200,
+  inputHeight: 35,
+  gap: 100,
   sequenceLength: 0,
-  btnBaseStyle: "pa3 mr2 sans-serif ba bw2 bg-transparent bg-animate pointer outline-0",
+  btnBaseStyle:
+    "pa3 mr2 sans-serif ba bw2 bg-transparent bg-animate pointer outline-0",
   init(element) {
     if (!element) {
       return;
@@ -31,7 +35,7 @@ const numberDifferenceTableUI = {
 
     firstOption.value = "-1";
     firstOption.innerHTML = "Select";
-    select.className = "ml3 pa2";
+    select.className = "ml3 pa2 outline-0";
     select.appendChild(firstOption);
 
     for (let i = this.selectMin; i <= this.selectMax; i++) {
@@ -49,26 +53,47 @@ const numberDifferenceTableUI = {
     this.container.appendChild(fragment);
   },
   selectHandler(event) {
+    const n = Number(event.target.value);
+
+    if (Number.isNaN(n) === true) {
+      console.error("Value is not a number");
+      return;
+    }
     this.clearApp();
-    this.generateInputs(event.target.value);
+    this.generateScrollContainer();
+    this.generateInputs(n);
+  },
+  generateScrollContainer() {
+    const div = document.createElement("div");
+
+    div.id = "theScroller";
+    div.className = "overflow-x-auto overflow-y-hidden";
+    this.container.appendChild(div);
   },
   generateInputs(amount) {
     const div = document.createElement("div");
     const fragment = document.createDocumentFragment();
+    const width = this.inputWidth * amount + this.gap * (amount - 1);
 
     div.id = "theSequence";
-    div.className = "mb2 flex";
+    div.className = "overflow-hidden";
+    div.style = `width: ${width}px;`;
 
     for (let i = 1; i <= amount; i++) {
       const input = document.createElement("input");
+      const gap = i === amount ? 0 : this.gap;
+
       input.name = `number-${i}`;
-      input.className = "pa3 mr2 w-10 sans-serif ba b--dashed outline-0";
+      input.className = "dit ph2 sans-serif ba b--dashed outline-0";
+      input.style = `width: ${this.inputWidth}px; height: ${
+        this.inputHeight
+      }px; margin-right: ${gap}px`;
       fragment.appendChild(input);
     }
 
     div.appendChild(fragment);
     this.generateActions();
-    this.container.appendChild(div);
+    document.getElementById("theScroller").appendChild(div);
   },
   generateActions() {
     const div = document.createElement("div");
@@ -81,7 +106,7 @@ const numberDifferenceTableUI = {
     fragment.appendChild(calculateBtn);
     fragment.appendChild(resetBtn);
     div.appendChild(fragment);
-    this.container.appendChild(div);
+    this.container.insertBefore(div, this.container.firstChild);
   },
   generateCalculateBtn() {
     const btn = document.createElement("button");
@@ -94,11 +119,20 @@ const numberDifferenceTableUI = {
     return btn;
   },
   calculateHandler() {
+    const inputs = [...document.querySelectorAll("#theSequence input")];
+    const emptyInputs = inputs.filter(input => null || input.value === "");
+    const numericInputValues = inputs.filter(
+      input => null || Number.isInteger(Number(input.value)) === false
+    );
+
+    if (emptyInputs.length > 0 || numericInputValues.length > 0) {
+      console.error("Empty inputs or not numbers");
+      return;
+    }
     this.generateDifferences(calculations.getSequence());
   },
   generateResetBtn() {
     const btn = document.createElement("button");
-    const btnBaseStyle = "";
 
     btn.id = "resetSequence";
     btn.className = `${this.btnBaseStyle} b--light-red hover-bg-light-red`;
@@ -115,12 +149,12 @@ const numberDifferenceTableUI = {
     div.id = "theDifferences";
 
     for (let i = 0; i < rows; i++) {
-      let div = document.createElement("div");
+      const divInner = document.createElement("div");
 
-      div.id = `rows-${i}`;
-      div.className = "mb2 flex";
-      div.appendChild(this.generateRow(values[i]));
-      fragment.appendChild(div);
+      divInner.id = `rows-${i}`;
+      divInner.className = "mb2 flex";
+      divInner.appendChild(this.generateRow(values[i]));
+      fragment.appendChild(divInner);
     }
 
     div.appendChild(fragment);
@@ -131,7 +165,7 @@ const numberDifferenceTableUI = {
     const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < limit; i++) {
-      let div = document.createElement("div");
+      const div = document.createElement("div");
 
       div.className = "pa3 mr2 w-10 sans-serif bg-light-gray";
       div.innerHTML = values[i];
