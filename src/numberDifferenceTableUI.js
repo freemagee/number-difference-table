@@ -129,7 +129,10 @@ const numberDifferenceTableUI = {
       console.error("Empty inputs or not numbers");
       return;
     }
-    this.generateDifferences(calculations.getSequence());
+
+    const sequence = inputs.map(input => Number(input.value));
+
+    this.generateDifferences(calculations.getSequence(sequence));
   },
   generateResetBtn() {
     const btn = document.createElement("button");

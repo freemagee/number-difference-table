@@ -1,18 +1,8 @@
 const calculations = {
   theSequence: [],
-  getSequence() {
-    // TODO: Deal with empty inputs
-    const inputs = [...document.querySelectorAll("input")];
-    const inputValues = [];
-
-    inputs.forEach(input => {
-      inputValues.push(input.value * 1);
-    });
-
-    // Push the first array of values into theSequence
-    //this.theSequence.push(inputValues);
+  getSequence(sequence) {
     // Use the array of values to calculate differences
-    this.calculateSequence(inputValues);
+    this.calculateSequence(sequence);
 
     return this.returnTheSequence();
   },
@@ -40,10 +30,10 @@ const calculations = {
     this.theSequence = [];
   },
   isIdentical(array) {
-    for(var i = 0; i < array.length - 1; i++) {
-        if(array[i] !== array[i+1]) {
-            return false;
-        }
+    for (let i = 0; i < array.length - 1; i++) {
+      if (array[i] !== array[i + 1]) {
+        return false;
+      }
     }
     return true;
   },
