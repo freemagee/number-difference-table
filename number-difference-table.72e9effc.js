@@ -7,4 +7,3 @@ parcelRequire=function(e,r,n,t){var i="function"==typeof parcelRequire&&parcelRe
 },{"tachyons":"cKoJ","./calculations.js":"lH+g"}],"Focm":[function(require,module,exports) {
 "use strict";var e=t(require("./src/numberDifferenceTableUI.js"));function t(e){return e&&e.__esModule?e:{default:e}}e.default.init(document.getElementById("app"));
 },{"./src/numberDifferenceTableUI.js":"OSwK"}]},{},["Focm"], null)
-//# sourceMappingURL=https://freemagee.github.io/number-difference-table/number-difference-table.d2712144.map
