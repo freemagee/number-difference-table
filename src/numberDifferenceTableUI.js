@@ -3,6 +3,7 @@ import calculations from "./calculations.js";
 
 const numberDifferenceTableUI = {
   container: null,
+  selectMin: 3,
   selectMax: 20,
   sequenceLength: 0,
   btnBaseStyle: "pa3 mr2 sans-serif ba bw2 bg-transparent bg-animate pointer outline-0",
@@ -33,7 +34,7 @@ const numberDifferenceTableUI = {
     select.className = "ml3 pa2";
     select.appendChild(firstOption);
 
-    for (let i = 2; i <= this.selectMax; i++) {
+    for (let i = this.selectMin; i <= this.selectMax; i++) {
       const option = document.createElement("option");
       option.value = i;
       option.innerHTML = i;
