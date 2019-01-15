@@ -5,9 +5,9 @@ const numberDifferenceTableUI = {
   container: null,
   selectMin: 3,
   selectMax: 20,
-  inputWidth: 200,
-  inputHeight: 35,
-  gap: 100,
+  inputWidth: 120,
+  inputHeight: 32,
+  gap: 60,
   sequenceLength: 0,
   btnBaseStyle:
     "pa3 mr2 sans-serif ba bw2 bg-transparent bg-animate pointer outline-0",
@@ -76,7 +76,7 @@ const numberDifferenceTableUI = {
     const width = this.inputWidth * amount + this.gap * (amount - 1);
 
     div.id = "theSequence";
-    div.className = "overflow-hidden";
+    div.className = "mb2 overflow-hidden";
     div.style = `width: ${width}px;`;
 
     for (let i = 1; i <= amount; i++) {
@@ -84,7 +84,7 @@ const numberDifferenceTableUI = {
       const gap = i === amount ? 0 : this.gap;
 
       input.name = `number-${i}`;
-      input.className = "dit ph2 sans-serif ba b--dashed outline-0";
+      input.className = "ph2 sans-serif ba b--dashed outline-0";
       input.style = `width: ${this.inputWidth}px; height: ${
         this.inputHeight
       }px; margin-right: ${gap}px`;
@@ -132,6 +132,10 @@ const numberDifferenceTableUI = {
 
     const sequence = inputs.map(input => Number(input.value));
 
+    if (document.getElementById("theDifferences") !== null) {
+      document.getElementById("theDifferences").remove();
+    }
+
     this.generateDifferences(calculations.getSequence(sequence));
   },
   generateResetBtn() {
@@ -153,15 +157,20 @@ const numberDifferenceTableUI = {
 
     for (let i = 0; i < rows; i++) {
       const divInner = document.createElement("div");
+      // Padding is used to push the results to the left, so they sit centrally, and form a downward pyramid with the results
+      const padding = this.gap * (i + 1) + this.gap * (0.5 * (i + 1));
+      const width =
+        this.inputWidth * (rows - i) + this.gap * (rows - 1 - i) + padding;
 
       divInner.id = `rows-${i}`;
-      divInner.className = "mb2 flex";
+      divInner.className = "mb2 overflow-hidden";
+      divInner.style = `width: ${width}px; padding-left: ${padding}`;
       divInner.appendChild(this.generateRow(values[i]));
       fragment.appendChild(divInner);
     }
 
     div.appendChild(fragment);
-    this.container.appendChild(div);
+    document.getElementById("theScroller").appendChild(div);
   },
   generateRow(values) {
     const limit = values.length;
@@ -169,8 +178,12 @@ const numberDifferenceTableUI = {
 
     for (let i = 0; i < limit; i++) {
       const div = document.createElement("div");
+      const gap = i === limit - 1 ? 0 : this.gap;
 
-      div.className = "pa3 mr2 w-10 sans-serif bg-light-gray";
+      div.className = "dit ph2 mr2 sans-serif bg-light-gray";
+      div.style = `width: ${this.inputWidth}px; height: ${
+        this.inputHeight
+      }px; margin-right: ${gap}px; line-height: ${this.inputHeight}px;`;
       div.innerHTML = values[i];
       fragment.appendChild(div);
     }

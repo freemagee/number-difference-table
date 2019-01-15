@@ -1,6 +1,7 @@
 const calculations = {
   theSequence: [],
   getSequence(sequence) {
+    this.reset();
     // Use the array of values to calculate differences
     this.calculateSequence(sequence);
 
