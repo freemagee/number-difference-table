@@ -4,11 +4,12 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel index.html",
-    "build": "rimraf dist\/ && parcel build index.html --public-url https://freemagee.github.io/number-difference-table/ --no-source-maps",
+    "build": "rimraf dist/ && parcel build index.html --public-url https://freemagee.github.io/number-difference-table/ --no-source-maps",
     "deploy": "gh-pages -d dist"
   },
   "license": "MIT",
   "dependencies": {
+    "gh-pages": "^2.0.1",
     "tachyons": "4.10.0"
   },
   "devDependencies": {
