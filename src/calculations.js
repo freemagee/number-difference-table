@@ -38,6 +38,9 @@ const calculations = {
     }
     return true;
   },
+  isEven(value) {
+    return value % 2 === 0;
+  },
   returnTheSequence() {
     return this.theSequence;
   }
