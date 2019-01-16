@@ -12,7 +12,7 @@ const numberDifferenceTableUI = {
   inputHeight: 60,
   gap: 30,
   btnBaseStyle:
-    "pa3 mr2 sans-serif ba bw2 bg-transparent bg-animate pointer outline-0",
+    "pa3 mr2 sans-serif dark-gray ba bw2 bg-transparent bg-animate pointer outline-0",
   init(element) {
     if (!element) {
       return;
@@ -80,7 +80,7 @@ const numberDifferenceTableUI = {
     const fragment = document.createDocumentFragment();
     const width = this.inputWidth * amount + this.gap * (amount - 1);
 
-    sequenceLabel.className = "ma0 mb3 f3 lh-copy sans-serif";
+    sequenceLabel.className = "ma0 mb3 f3 lh-title sans-serif";
     sequenceLabel.innerHTML = "Please enter sequence into inputs below:";
 
     div.id = "theSequence";
@@ -92,7 +92,8 @@ const numberDifferenceTableUI = {
       const gap = i === amount ? 0 : this.gap;
 
       input.name = `number-${i}`;
-      input.className = "ph2 tc sans-serif bn bg-light-yellow outline-0";
+      input.className =
+        "ph2 tc sans-serif dark-gray bn bg-light-yellow outline-0";
       input.style = `width: ${this.inputWidth}px; height: ${
         this.inputHeight
       }px; margin-right: ${gap}px`;
@@ -161,12 +162,38 @@ const numberDifferenceTableUI = {
     return btn;
   },
   solveHandler() {
-    if (this.originalSequence.length === 0 && this.theDifferences === 0) {
+    if (
+      this.originalSequence.length === 0 &&
+      this.theDifferences.length === 0
+    ) {
       console.error("Nothing to solve");
       return;
     }
 
-    solveSequence.solve(this.originalSequence, this.theDifferences);
+    const solution = solveSequence.solve(
+      this.originalSequence,
+      this.theDifferences
+    );
+    this.generateSolution(solution);
+  },
+  generateSolution(solution) {
+    const isDivergentClass = solution.isDivergent ? "bg-red" : "bg-green";
+    const sequenceSolution = document.createElement("div");
+
+    sequenceSolution.className = `dit ph2 tc sans-serif ${isDivergentClass}`;
+    sequenceSolution.style = `width: ${this.inputWidth}; margin-left: ${
+      this.gap
+    }; line-height: ${this.inputHeight}px;`;
+    sequenceSolution.innerHTML = solution.solvedSequenceValue;
+
+    // Now modify the original sequence container. Only extending it's width and adding the solution value
+    const theSequenceContainer = document.getElementById("theSequence");
+    const newSequenceContainerWidth =
+      theSequenceContainer.offsetWidth + (this.gap + this.inputWidth);
+
+    theSequenceContainer.style = `width: ${newSequenceContainerWidth}px; margin: 0 auto 0.5rem`;
+
+    theSequenceContainer.appendChild(sequenceSolution);
   },
   generateResetBtn() {
     const btn = document.createElement("button");
@@ -212,7 +239,7 @@ const numberDifferenceTableUI = {
       const div = document.createElement("div");
       const gap = i === limit - 1 ? 0 : this.gap;
 
-      div.className = "dit ph2 mr2 tc sans-serif bg-light-gray";
+      div.className = "dit ph2 tc sans-serif bg-light-gray";
       div.style = `width: ${this.inputWidth}px; height: ${
         this.inputHeight
       }px; margin-right: ${gap}px; line-height: ${this.inputHeight}px;`;

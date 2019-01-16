@@ -1,14 +1,24 @@
 const solveSequence = {
   solve(originalSequence, theDifferences) {
-    const sequenceIsDivergent = this.isDivergent(
+    const isDivergent = this.isDivergent(
       theDifferences[theDifferences.length - 1]
     );
-    console.log(sequenceIsDivergent);
-    this.solveTheDifferences(theDifferences);
+    const solvedDifferences = this.solveTheDifferences(theDifferences);
+    const solvedSequenceValue = this.solveTheOriginal(
+      originalSequence[originalSequence.length - 1],
+      solvedDifferences[solvedDifferences.length - 1]
+    );
+
+    return {
+      isDivergent,
+      solvedDifferences,
+      solvedSequenceValue
+    };
   },
   solveTheDifferences(theDifferences) {
     const lines = theDifferences.length;
-    const lastValues = [];
+    const newValues = [];
+    let diff = 0;
 
     for (let i = lines; i > 0; i--) {
       const lastVal =
@@ -16,19 +26,23 @@ const solveSequence = {
           ? theDifferences[i - 1]
           : theDifferences[i - 1][theDifferences[i - 1].length - 1];
 
-      lastValues.push(lastVal);
+      newValues.push(lastVal + diff);
+      diff = lastVal;
     }
 
-    console.log(lastValues);
+    return newValues;
+  },
+  solveTheOriginal(original, difference) {
+    return original + difference;
   },
   isDivergent(lastCommonDifference) {
     const lcd = lastCommonDifference[0];
 
     if (lcd === 1 || lcd < 0) {
-      return "You divergent sob";
+      return true;
     }
 
-    return "Good sequence";
+    return false;
   }
 };
 
