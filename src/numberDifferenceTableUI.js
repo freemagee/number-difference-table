@@ -1,14 +1,16 @@
 import "tachyons";
 import calculations from "./calculations";
+import solveSequence from "./solveSequence";
 
 const numberDifferenceTableUI = {
   container: null,
+  originalSequence: [],
+  theDifferences: [],
   selectMin: 3,
   selectMax: 20,
   inputWidth: 120,
-  inputHeight: 32,
-  gap: 60,
-  sequenceLength: 0,
+  inputHeight: 60,
+  gap: 30,
   btnBaseStyle:
     "pa3 mr2 sans-serif ba bw2 bg-transparent bg-animate pointer outline-0",
   init(element) {
@@ -21,6 +23,8 @@ const numberDifferenceTableUI = {
   },
   resetApp() {
     calculations.reset();
+    this.originalSequence = [];
+    this.theDifferences = [];
     this.clearApp();
     this.generateSelect();
   },
@@ -71,26 +75,31 @@ const numberDifferenceTableUI = {
     this.container.appendChild(div);
   },
   generateInputs(amount) {
+    const sequenceLabel = document.createElement("p");
     const div = document.createElement("div");
     const fragment = document.createDocumentFragment();
     const width = this.inputWidth * amount + this.gap * (amount - 1);
 
+    sequenceLabel.className = "ma0 mb3 f3 lh-copy sans-serif";
+    sequenceLabel.innerHTML = "Please enter sequence into inputs below:";
+
     div.id = "theSequence";
-    div.className = "mb2 overflow-hidden";
-    div.style = `width: ${width}px;`;
+    div.className = "overflow-hidden";
+    div.style = `width: ${width}px; margin: 0 auto 0.5rem`;
 
     for (let i = 1; i <= amount; i++) {
       const input = document.createElement("input");
       const gap = i === amount ? 0 : this.gap;
 
       input.name = `number-${i}`;
-      input.className = "ph2 sans-serif ba b--dashed outline-0";
+      input.className = "ph2 tc sans-serif bn bg-light-yellow outline-0";
       input.style = `width: ${this.inputWidth}px; height: ${
         this.inputHeight
       }px; margin-right: ${gap}px`;
       fragment.appendChild(input);
     }
 
+    div.appendChild(sequenceLabel);
     div.appendChild(fragment);
     this.generateActions();
     document.getElementById("theScroller").appendChild(div);
@@ -99,11 +108,13 @@ const numberDifferenceTableUI = {
     const div = document.createElement("div");
     const fragment = document.createDocumentFragment();
     const calculateBtn = this.generateCalculateBtn();
+    const solveBtn = this.generateSolveBtn();
     const resetBtn = this.generateResetBtn();
 
     div.id = "theActions";
-    div.className = "pb5 flex";
+    div.className = "pb4 mb4 flex bb bw2 b--black-20";
     fragment.appendChild(calculateBtn);
+    fragment.appendChild(solveBtn);
     fragment.appendChild(resetBtn);
     div.appendChild(fragment);
     this.container.insertBefore(div, this.container.firstChild);
@@ -113,7 +124,7 @@ const numberDifferenceTableUI = {
 
     btn.id = "calculateSequence";
     btn.className = `${this.btnBaseStyle} b--light-green hover-bg-light-green`;
-    btn.innerHTML = "Calculate";
+    btn.innerHTML = "Calculate differences";
     btn.addEventListener("click", this.calculateHandler.bind(this));
 
     return btn;
@@ -131,12 +142,31 @@ const numberDifferenceTableUI = {
     }
 
     const sequence = inputs.map(input => Number(input.value));
+    this.originalSequence = sequence;
 
     if (document.getElementById("theDifferences") !== null) {
       document.getElementById("theDifferences").remove();
     }
 
     this.generateDifferences(calculations.getSequence(sequence));
+  },
+  generateSolveBtn() {
+    const btn = document.createElement("button");
+
+    btn.id = "solveSequence";
+    btn.className = `${this.btnBaseStyle} b--light-blue hover-bg-light-blue`;
+    btn.innerHTML = "Solve sequence";
+    btn.addEventListener("click", this.solveHandler.bind(this));
+
+    return btn;
+  },
+  solveHandler() {
+    if (this.originalSequence.length === 0 && this.theDifferences === 0) {
+      console.error("Nothing to solve");
+      return;
+    }
+
+    solveSequence.solve(this.originalSequence, this.theDifferences);
   },
   generateResetBtn() {
     const btn = document.createElement("button");
@@ -149,25 +179,24 @@ const numberDifferenceTableUI = {
     return btn;
   },
   generateDifferences(values) {
+    this.theDifferences = values;
     const div = document.createElement("div");
     const fragment = document.createDocumentFragment();
     const rows = values.length;
 
     div.id = "theDifferences";
+    div.className = "flex flex-column items-center";
 
     for (let i = 0; i < rows; i++) {
       const rowResults = values[i];
       const divInner = document.createElement("div");
-      // Padding is used to push the results to the left, so they sit centrally, and form a downward pyramid with the results
-      const padding = this.gap * (i + 1) + this.gap * (0.5 * (i + 1));
       const width =
         this.inputWidth * rowResults.length +
-        this.gap * (rowResults.length - 1) +
-        padding;
+        this.gap * (rowResults.length - 1);
 
       divInner.id = `rows-${i}`;
       divInner.className = "mb2 overflow-hidden";
-      divInner.style = `width: ${width}px; padding-left: ${padding}`;
+      divInner.style = `width: ${width}px;`;
       divInner.appendChild(this.generateRow(rowResults));
       fragment.appendChild(divInner);
     }
@@ -183,7 +212,7 @@ const numberDifferenceTableUI = {
       const div = document.createElement("div");
       const gap = i === limit - 1 ? 0 : this.gap;
 
-      div.className = "dit ph2 mr2 sans-serif bg-light-gray";
+      div.className = "dit ph2 mr2 tc sans-serif bg-light-gray";
       div.style = `width: ${this.inputWidth}px; height: ${
         this.inputHeight
       }px; margin-right: ${gap}px; line-height: ${this.inputHeight}px;`;
