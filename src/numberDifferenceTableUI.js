@@ -92,6 +92,7 @@ const numberDifferenceTableUI = {
       const gap = i === amount ? 0 : this.gap;
 
       input.name = `number-${i}`;
+      input.type = "number";
       input.className =
         "ph2 tc sans-serif dark-gray bn bg-light-yellow outline-0";
       input.style = `width: ${this.inputWidth}px; height: ${
