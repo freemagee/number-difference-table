@@ -10,7 +10,7 @@ const numberDifferenceTableUI = {
   selectMax: 20,
   inputWidth: 120,
   inputHeight: 60,
-  gap: 30,
+  gap: 60,
   btnBaseStyle:
     "pa3 mr2 sans-serif dark-gray ba bw2 bg-transparent bg-animate pointer outline-0",
   init(element) {
@@ -213,18 +213,20 @@ const numberDifferenceTableUI = {
     const rows = values.length;
 
     div.id = "theDifferences";
-    div.className = "flex flex-column items-center";
 
     for (let i = 0; i < rows; i++) {
       const rowResults = values[i];
       const divInner = document.createElement("div");
+      // Padding is used to push the results to the left, so they sit centrally, and form a downward pyramid with the results
+      const padding = this.gap * (1.5 * (i + 1));
       const width =
         this.inputWidth * rowResults.length +
-        this.gap * (rowResults.length - 1);
+        this.gap * (rowResults.length - 1) +
+        padding;
 
       divInner.id = `rows-${i}`;
       divInner.className = "mb2 overflow-hidden";
-      divInner.style = `width: ${width}px;`;
+      divInner.style = `width: ${width}px; padding-left: ${padding}px;`;
       divInner.appendChild(this.generateRow(rowResults));
       fragment.appendChild(divInner);
     }
