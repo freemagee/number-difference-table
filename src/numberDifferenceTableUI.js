@@ -10,7 +10,7 @@ const numberDifferenceTableUI = {
   selectMax: 20,
   inputWidth: 120,
   inputHeight: 60,
-  gap: 60,
+  gap: 30,
   btnBaseStyle:
     "pa3 mr2 sans-serif dark-gray ba bw2 bg-transparent bg-animate pointer outline-0",
   init(element) {
@@ -182,9 +182,9 @@ const numberDifferenceTableUI = {
     const sequenceSolution = document.createElement("div");
 
     sequenceSolution.className = `dit ph2 tc sans-serif ${isDivergentClass}`;
-    sequenceSolution.style = `width: ${this.inputWidth}; margin-left: ${
+    sequenceSolution.style = `width: ${this.inputWidth}px; margin-left: ${
       this.gap
-    }; line-height: ${this.inputHeight}px;`;
+    }px; line-height: ${this.inputHeight}px;`;
     sequenceSolution.innerHTML = solution.solvedSequenceValue;
 
     // Now modify the original sequence container. Only extending it's width and adding the solution value
@@ -192,7 +192,7 @@ const numberDifferenceTableUI = {
     const newSequenceContainerWidth =
       theSequenceContainer.offsetWidth + (this.gap + this.inputWidth);
 
-    theSequenceContainer.style = `width: ${newSequenceContainerWidth}px; margin: 0 auto 0.5rem`;
+    theSequenceContainer.style = `width: ${newSequenceContainerWidth}px;`;
 
     theSequenceContainer.appendChild(sequenceSolution);
   },
@@ -218,7 +218,7 @@ const numberDifferenceTableUI = {
       const rowResults = values[i];
       const divInner = document.createElement("div");
       // Padding is used to push the results to the left, so they sit centrally, and form a downward pyramid with the results
-      const padding = this.gap * (1.5 * (i + 1));
+      const padding = (this.inputWidth / 2 + this.gap / 2) * (i + 1);
       const width =
         this.inputWidth * rowResults.length +
         this.gap * (rowResults.length - 1) +
