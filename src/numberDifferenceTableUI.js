@@ -84,8 +84,8 @@ const numberDifferenceTableUI = {
     sequenceLabel.innerHTML = "Please enter sequence into inputs below:";
 
     div.id = "theSequence";
-    div.className = "overflow-hidden";
-    div.style = `width: ${width}px; margin: 0 auto 0.5rem`;
+    div.className = "mb2 overflow-hidden";
+    div.style = `width: ${width}px;`;
 
     for (let i = 1; i <= amount; i++) {
       const input = document.createElement("input");
