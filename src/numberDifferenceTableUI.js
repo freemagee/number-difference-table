@@ -156,16 +156,19 @@ const numberDifferenceTableUI = {
     div.id = "theDifferences";
 
     for (let i = 0; i < rows; i++) {
+      const rowResults = values[i];
       const divInner = document.createElement("div");
       // Padding is used to push the results to the left, so they sit centrally, and form a downward pyramid with the results
       const padding = this.gap * (i + 1) + this.gap * (0.5 * (i + 1));
       const width =
-        this.inputWidth * (rows - i) + this.gap * (rows - 1 - i) + padding;
+        this.inputWidth * rowResults.length +
+        this.gap * (rowResults.length - 1) +
+        padding;
 
       divInner.id = `rows-${i}`;
       divInner.className = "mb2 overflow-hidden";
       divInner.style = `width: ${width}px; padding-left: ${padding}`;
-      divInner.appendChild(this.generateRow(values[i]));
+      divInner.appendChild(this.generateRow(rowResults));
       fragment.appendChild(divInner);
     }
 
