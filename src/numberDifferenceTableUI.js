@@ -57,7 +57,7 @@ const numberDifferenceTableUI = {
 
     firstOption.value = "-1";
     firstOption.innerHTML = "Select";
-    select.className = "ml3 pa2 outline-0";
+    select.className = "ml2 pa2 outline-0";
     select.appendChild(firstOption);
 
     for (let i = this.selectMin; i <= this.selectMax; i++) {
@@ -68,7 +68,7 @@ const numberDifferenceTableUI = {
     }
 
     selectLabel.className = "ma0 sans-serif";
-    selectLabel.innerHTML = `Select sequence length (max ${this.selectMax})`;
+    selectLabel.innerHTML = `Sequence length (max ${this.selectMax})`;
     selectLabel.appendChild(select);
     select.addEventListener("change", this.selectHandler.bind(this));
     fragment.appendChild(selectLabel);
