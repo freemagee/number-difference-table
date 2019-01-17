@@ -181,7 +181,7 @@ const numberDifferenceTableUI = {
     const isDivergentClass = solution.isDivergent ? "bg-red" : "bg-green";
     const sequenceSolution = document.createElement("div");
 
-    sequenceSolution.className = `dit ph2 tc sans-serif ${isDivergentClass}`;
+    sequenceSolution.className = `dit ph2 tc sans-serif white ${isDivergentClass}`;
     sequenceSolution.style = `width: ${this.inputWidth}px; margin-left: ${
       this.gap
     }px; line-height: ${this.inputHeight}px;`;
@@ -195,6 +195,28 @@ const numberDifferenceTableUI = {
     theSequenceContainer.style = `width: ${newSequenceContainerWidth}px;`;
 
     theSequenceContainer.appendChild(sequenceSolution);
+
+    // Now add the solutions for the remaining differences
+    this.addSolutionsToRows(solution.solvedDifferences, solution.isDivergent);
+  },
+  addSolutionsToRows(solutions, isDivergent) {
+    const isDivergentClass = isDivergent ? "bg-red" : "bg-green";
+    const rows = solutions.length;
+
+    for (let i = 0; i < rows; i++) {
+      const rowID = `row-${i + 1}`;
+      const row = document.getElementById(rowID);
+      const div = document.createElement("div");
+      const newRowWidth = row.offsetWidth + (this.gap + this.inputWidth);
+
+      row.style = `width: ${newRowWidth}px;`;
+      div.className = `dit ph2 tc sans-serif ${isDivergentClass}`;
+      div.style = `width: ${this.inputWidth}px; height: ${
+        this.inputHeight
+      }px; margin-left: ${this.gap}px; line-height: ${this.inputHeight}px;`;
+      div.innerHTML = solutions[i];
+      row.appendChild(div);
+    }
   },
   generateResetBtn() {
     const btn = document.createElement("button");
@@ -224,7 +246,7 @@ const numberDifferenceTableUI = {
         this.gap * (rowResults.length - 1) +
         padding;
 
-      divInner.id = `rows-${i}`;
+      divInner.id = `row-${i + 1}`;
       divInner.className = "mb2 overflow-hidden";
       divInner.style = `width: ${width}px; padding-left: ${padding}px;`;
       divInner.appendChild(this.generateRow(rowResults));
