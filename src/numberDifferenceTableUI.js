@@ -66,6 +66,8 @@ const numberDifferenceTableUI = {
     this.clearApp();
     this.generateScrollContainer();
     this.generateInputs(n);
+    this.generateActions();
+    this.generateInstructions();
   },
   generateScrollContainer() {
     const div = document.createElement("div");
@@ -74,14 +76,21 @@ const numberDifferenceTableUI = {
     div.className = "overflow-x-auto overflow-y-hidden";
     this.container.appendChild(div);
   },
-  generateInputs(amount) {
+  generateInstructions() {
+    const instructions = document.createElement("div");
     const sequenceLabel = document.createElement("p");
+
+    sequenceLabel.className = "ma0 f3 lh-title sans-serif";
+    sequenceLabel.innerHTML = "Please enter sequence into inputs below:";
+    instructions.id = "theInstructions";
+    instructions.className = "mb3";
+    instructions.appendChild(sequenceLabel);
+    this.container.insertBefore(instructions, this.container.childNodes[1]);
+  },
+  generateInputs(amount) {
     const div = document.createElement("div");
     const fragment = document.createDocumentFragment();
     const width = this.inputWidth * amount + this.gap * (amount - 1);
-
-    sequenceLabel.className = "ma0 mb3 f3 lh-title sans-serif";
-    sequenceLabel.innerHTML = "Please enter sequence into inputs below:";
 
     div.id = "theSequence";
     div.className = "mb2 overflow-hidden";
@@ -101,9 +110,7 @@ const numberDifferenceTableUI = {
       fragment.appendChild(input);
     }
 
-    div.appendChild(sequenceLabel);
     div.appendChild(fragment);
-    this.generateActions();
     document.getElementById("theScroller").appendChild(div);
   },
   generateActions() {
