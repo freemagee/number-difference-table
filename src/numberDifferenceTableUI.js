@@ -28,6 +28,24 @@ const numberDifferenceTableUI = {
     this.clearApp();
     this.generateSelect();
   },
+  resetResults() {
+    if (document.getElementById("theDifferences") !== null) {
+      document.getElementById("theDifferences").remove();
+    }
+
+    if (document.getElementById("theSolutions") !== null) {
+      document.getElementById("theSolutions").remove();
+    }
+
+    if (document.getElementById("sequenceSolution") !== null) {
+      document.getElementById("sequenceSolution").remove();
+      const theSequenceContainer = document.getElementById("theSequence");
+      const newWidth =
+        theSequenceContainer.offsetWidth - this.gap - this.inputWidth;
+
+      theSequenceContainer.style = `width: ${newWidth}px;`;
+    }
+  },
   clearApp() {
     this.container.innerHTML = "";
   },
@@ -153,13 +171,7 @@ const numberDifferenceTableUI = {
     const sequence = inputs.map(input => Number(input.value));
     this.originalSequence = sequence;
 
-    if (document.getElementById("theDifferences") !== null) {
-      document.getElementById("theDifferences").remove();
-    }
-
-    if (document.getElementById("theSolutions") !== null) {
-      document.getElementById("theSolutions").remove();
-    }
+    this.resetResults();
 
     // this.generateDifferences(calculations.getSequence(sequence));
     this.renderDifferences(calculations.getSequence(sequence));
