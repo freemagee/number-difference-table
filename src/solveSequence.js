@@ -51,13 +51,7 @@ const solveSequence = {
     return original + difference;
   },
   isDivergent(lastCommonDifference) {
-    const lcd = lastCommonDifference[0];
-
-    if (lcd === 1 || lcd < 0) {
-      return true;
-    }
-
-    return false;
+    return false || lastCommonDifference.length === 1;
   }
 };
 
