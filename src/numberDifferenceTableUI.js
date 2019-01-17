@@ -150,7 +150,12 @@ const numberDifferenceTableUI = {
       document.getElementById("theDifferences").remove();
     }
 
-    this.generateDifferences(calculations.getSequence(sequence));
+    if (document.getElementById("theSolutions") !== null) {
+      document.getElementById("theSolutions").remove();
+    }
+
+    // this.generateDifferences(calculations.getSequence(sequence));
+    this.renderDifferences(calculations.getSequence(sequence));
   },
   generateSolveBtn() {
     const btn = document.createElement("button");
@@ -181,6 +186,7 @@ const numberDifferenceTableUI = {
     const isDivergentClass = solution.isDivergent ? "bg-red" : "bg-green";
     const sequenceSolution = document.createElement("div");
 
+    sequenceSolution.id = "sequenceSolution";
     sequenceSolution.className = `dit ph2 tc sans-serif white ${isDivergentClass}`;
     sequenceSolution.style = `width: ${this.inputWidth}px; margin-left: ${
       this.gap
@@ -197,26 +203,26 @@ const numberDifferenceTableUI = {
     theSequenceContainer.appendChild(sequenceSolution);
 
     // Now add the solutions for the remaining differences
-    this.addSolutionsToRows(solution.solvedDifferences, solution.isDivergent);
+    // this.addSolutionsToRows(solution.solvedDifferences, solution.isDivergent);
+    document.getElementById("theDifferences").remove();
+    const values = this.combineSolutionsWithDifferences(
+      solution.solvedDifferences
+    );
+    this.generateRows("theSolutions", values, true, solution.isDivergent);
   },
-  addSolutionsToRows(solutions, isDivergent) {
-    const isDivergentClass = isDivergent ? "bg-red" : "bg-green";
-    const rows = solutions.length;
+  combineSolutionsWithDifferences(solution) {
+    const depth = this.theDifferences.length;
+    const newValues = [];
 
-    for (let i = 0; i < rows; i++) {
-      const rowID = `row-${i + 1}`;
-      const row = document.getElementById(rowID);
-      const div = document.createElement("div");
-      const newRowWidth = row.offsetWidth + (this.gap + this.inputWidth);
+    for (let i = 0; i < depth; i++) {
+      const sequence = this.theDifferences[i];
+      const solutionVal = solution[i];
 
-      row.style = `width: ${newRowWidth}px;`;
-      div.className = `dit ph2 tc sans-serif ${isDivergentClass}`;
-      div.style = `width: ${this.inputWidth}px; height: ${
-        this.inputHeight
-      }px; margin-left: ${this.gap}px; line-height: ${this.inputHeight}px;`;
-      div.innerHTML = solutions[i];
-      row.appendChild(div);
+      sequence.push(solutionVal);
+      newValues.push(sequence);
     }
+
+    return newValues;
   },
   generateResetBtn() {
     const btn = document.createElement("button");
@@ -228,13 +234,16 @@ const numberDifferenceTableUI = {
 
     return btn;
   },
-  generateDifferences(values) {
+  renderDifferences(values) {
     this.theDifferences = values;
+    this.generateRows("theDifferences", values, false, false);
+  },
+  generateRows(id, values, isSolution, isDivergent) {
     const div = document.createElement("div");
     const fragment = document.createDocumentFragment();
     const rows = values.length;
 
-    div.id = "theDifferences";
+    div.id = id;
 
     for (let i = 0; i < rows; i++) {
       const rowResults = values[i];
@@ -246,17 +255,20 @@ const numberDifferenceTableUI = {
         this.gap * (rowResults.length - 1) +
         padding;
 
-      divInner.id = `row-${i + 1}`;
+      divInner.id = `row${i + 1}`;
       divInner.className = "mb2 overflow-hidden";
       divInner.style = `width: ${width}px; padding-left: ${padding}px;`;
-      divInner.appendChild(this.generateRow(rowResults));
+      divInner.appendChild(
+        this.generateRow(rowResults, isSolution, isDivergent)
+      );
       fragment.appendChild(divInner);
     }
 
     div.appendChild(fragment);
     document.getElementById("theScroller").appendChild(div);
   },
-  generateRow(values) {
+  generateRow(values, isSolution, isDivergent) {
+    const isDivergentClass = isDivergent ? "bg-red" : "bg-green";
     const limit = values.length;
     const fragment = document.createDocumentFragment();
 
@@ -264,7 +276,16 @@ const numberDifferenceTableUI = {
       const div = document.createElement("div");
       const gap = i === limit - 1 ? 0 : this.gap;
 
-      div.className = "dit ph2 tc sans-serif bg-light-gray";
+      if (isSolution) {
+        // Only apply to last item in a solution row
+        if (i === limit - 1) {
+          div.className = `dit ph2 tc sans-serif white ${isDivergentClass}`;
+        } else {
+          div.className = `dit ph2 tc sans-serif bg-light-gray`;
+        }
+      } else {
+        div.className = `dit ph2 tc sans-serif bg-light-gray`;
+      }
       div.style = `width: ${this.inputWidth}px; height: ${
         this.inputHeight
       }px; margin-right: ${gap}px; line-height: ${this.inputHeight}px;`;
