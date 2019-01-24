@@ -5,19 +5,27 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "rimraf dist/ && parcel build index.html --public-url https://freemagee.github.io/number-difference-table/ --no-source-maps",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "test": "jest"
   },
   "license": "MIT",
   "dependencies": {
-    "gh-pages": "^2.0.1",
-    "tachyons": "4.10.0"
+    "tachyons": "^4.11.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.2.3",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
     "eslint": "^5.12.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.4.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "gh-pages": "^2.0.1",
+    "jest": "^23.6.0",
     "parcel-bundler": "^1.11.0",
     "prettier": "^1.15.3"
   },
@@ -26,5 +34,17 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "jest": {
+    "verbose": true,
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  }
 }

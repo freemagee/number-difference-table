@@ -3,8 +3,7 @@ module.exports = {
     "ecmaVersion": 6
   },
   "env": {
-    "browser": true,
-    "node": true
+    "browser": true
   },
   "extends": [
     "airbnb-base",
@@ -21,5 +20,8 @@ module.exports = {
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-restricted-imports": ["error", "fs"]
   },
-  "globals": {}
+  "globals": {
+    "test": true,
+    "expect": true
+  }
 };
